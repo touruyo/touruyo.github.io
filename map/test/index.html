@@ -8,10 +8,14 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <link rel="stylesheet" href="css/leaflet.css">
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/MarkerCluster.css">
+        <link rel="stylesheet" href="css/MarkerCluster.Default.css">
         <style>
-        #map {
-            width: 999px;
-            height: 595px;
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
         }
         </style>
         <title></title>
@@ -28,19 +32,13 @@
         <script src="js/rbush.min.js"></script>
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
-        <script src="js/proj4.js"></script>
-        <script src="js/proj4leaflet.js"></script>
-        <script src="data/Hospitality_1.js"></script>
-        <script src="data/Recreational_2.js"></script>
-        <script src="data/Entertainment_3.js"></script>
+        <script src="js/leaflet.markercluster.js"></script>
+        <script src="data/Shopping_1.js"></script>
+        <script src="data/PoliceStation_2.js"></script>
+        <script src="data/Hospitality_3.js"></script>
+        <script src="data/Entertainment_4.js"></script>
         <script>
-        var crs = new L.Proj.CRS('EPSG:32632', '+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs', {
-            resolutions: [2800, 1400, 700, 350, 175, 84, 42, 21, 11.2, 5.6, 2.8, 1.4, 0.7, 0.35, 0.14, 0.07],
-        });
         var map = L.map('map', {
-            crs: crs,
-            continuousWorld: false,
-            worldCopyJump: false, 
             zoomControl:true, maxZoom:28, minZoom:1
         })
         var hash = new L.Hash(map);
@@ -51,11 +49,142 @@
                 map.fitBounds(bounds_group.getBounds());
             }
         }
-        var layer_OpenStreet=L.tileLayer('http://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {opacity:1.0,   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  });
-        layer_OpenStreet;
-        map.addLayer(layer_OpenStreet);
-        function pop_Hospitality_1(feature, layer) {
+        var layer_OpenStreetMap_0 = L.tileLayer('http://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_OpenStreetMap_0;
+        map.addLayer(layer_OpenStreetMap_0);
+        function pop_Shopping_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['name_of_it'] !== null ? Autolinker.link(feature.properties['name_of_it'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['category'] !== null ? Autolinker.link(feature.properties['category'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['street'] !== null ? Autolinker.link(feature.properties['street'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['address'] !== null ? Autolinker.link(feature.properties['address'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['rating'] !== null ? Autolinker.link(feature.properties['rating'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['phone'] !== null ? Autolinker.link(feature.properties['phone'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['shopping_t'] !== null ? Autolinker.link(feature.properties['shopping_t'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['shopping_1'] !== null ? Autolinker.link(feature.properties['shopping_1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['email'] !== null ? Autolinker.link(feature.properties['email'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Shopping_1_0() {
+            return {
+                pane: 'pane_Shopping_1',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/grocery-or-supermarket.svg',
+            iconSize: [15.2, 15.2]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Shopping_1');
+        map.getPane('pane_Shopping_1').style.zIndex = 401;
+        map.getPane('pane_Shopping_1').style['mix-blend-mode'] = 'normal';
+        var layer_Shopping_1 = new L.geoJson(json_Shopping_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Shopping_1',
+            layerName: 'layer_Shopping_1',
+            pane: 'pane_Shopping_1',
+            onEachFeature: pop_Shopping_1,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Shopping_1_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Shopping_1);
+        map.addLayer(layer_Shopping_1);
+        function pop_PoliceStation_2(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">name_of_it</th>\
+                        <td>' + (feature.properties['name_of_it'] !== null ? Autolinker.link(feature.properties['name_of_it'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">category</th>\
+                        <td>' + (feature.properties['category'] !== null ? Autolinker.link(feature.properties['category'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">street</th>\
+                        <td>' + (feature.properties['street'] !== null ? Autolinker.link(feature.properties['street'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">address</th>\
+                        <td>' + (feature.properties['address'] !== null ? Autolinker.link(feature.properties['address'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['servicing_'] !== null ? Autolinker.link(feature.properties['servicing_'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['phone'] !== null ? Autolinker.link(feature.properties['phone'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_PoliceStation_2_0() {
+            return {
+                pane: 'pane_PoliceStation_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/police.svg',
+            iconSize: [15.2, 15.2]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_PoliceStation_2');
+        map.getPane('pane_PoliceStation_2').style.zIndex = 402;
+        map.getPane('pane_PoliceStation_2').style['mix-blend-mode'] = 'normal';
+        var layer_PoliceStation_2 = new L.geoJson(json_PoliceStation_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_PoliceStation_2',
+            layerName: 'layer_PoliceStation_2',
+            pane: 'pane_PoliceStation_2',
+            onEachFeature: pop_PoliceStation_2,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_PoliceStation_2_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_PoliceStation_2);
+        map.addLayer(layer_PoliceStation_2);
+        function pop_Hospitality_3(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">name_of_it</th>\
@@ -98,16 +227,15 @@
                         <td>' + (feature.properties['email'] !== null ? Autolinker.link(feature.properties['email'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Photo</th>\
-                        <td>' + (feature.properties['Photo'] !== null ? '<img src="images/' + String(feature.properties['Photo']).replace(/[\\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Photo'] !== null ? '<img src="images/' + String(feature.properties['Photo']).replace(/[\\\/:]/g, '_').trim() + '">' : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_Hospitality_1_0() {
+        function style_Hospitality_3_0() {
             return {
-                pane: 'pane_Hospitality_1',
+                pane: 'pane_Hospitality_3',
         rotationAngle: 0.0,
         rotationOrigin: 'center center',
         icon: L.icon({
@@ -117,162 +245,31 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_Hospitality_1');
-        map.getPane('pane_Hospitality_1').style.zIndex = 401;
-        map.getPane('pane_Hospitality_1').style['mix-blend-mode'] = 'normal';
-        var layer_Hospitality_1 = new L.geoJson(json_Hospitality_1, {
+        map.createPane('pane_Hospitality_3');
+        map.getPane('pane_Hospitality_3').style.zIndex = 403;
+        map.getPane('pane_Hospitality_3').style['mix-blend-mode'] = 'normal';
+        var layer_Hospitality_3 = new L.geoJson(json_Hospitality_3, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Hospitality_1',
-            layerName: 'layer_Hospitality_1',
-            pane: 'pane_Hospitality_1',
-            onEachFeature: pop_Hospitality_1,
+            dataVar: 'json_Hospitality_3',
+            layerName: 'layer_Hospitality_3',
+            pane: 'pane_Hospitality_3',
+            onEachFeature: pop_Hospitality_3,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.marker(latlng, style_Hospitality_1_0(feature));
+                return L.marker(latlng, style_Hospitality_3_0(feature));
             },
         });
-        bounds_group.addLayer(layer_Hospitality_1);
-        map.addLayer(layer_Hospitality_1);
-        function pop_Recreational_2(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <th scope="row">name_of_it</th>\
-                        <td>' + (feature.properties['name_of_it'] !== null ? Autolinker.link(feature.properties['name_of_it'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">category</th>\
-                        <td>' + (feature.properties['category'] !== null ? Autolinker.link(feature.properties['category'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">street</th>\
-                        <td>' + (feature.properties['street'] !== null ? Autolinker.link(feature.properties['street'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">address</th>\
-                        <td>' + (feature.properties['address'] !== null ? Autolinker.link(feature.properties['address'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">rating</th>\
-                        <td>' + (feature.properties['rating'] !== null ? Autolinker.link(feature.properties['rating'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">recreation</th>\
-                        <td>' + (feature.properties['recreation'] !== null ? Autolinker.link(feature.properties['recreation'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">website</th>\
-                        <td>' + (feature.properties['website'] !== null ? Autolinker.link(feature.properties['website'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">phone</th>\
-                        <td>' + (feature.properties['phone'] !== null ? Autolinker.link(feature.properties['phone'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['shopping_t'] !== null ? Autolinker.link(feature.properties['shopping_t'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['shopping_1'] !== null ? Autolinker.link(feature.properties['shopping_1'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['email'] !== null ? Autolinker.link(feature.properties['email'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
+        var cluster_Hospitality_3 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_Hospitality_3.addLayer(layer_Hospitality_3);
 
-        function style_Recreational_2_0(feature) {
-            switch(String(feature.properties['recreation'])) {
-                case 'art_gallery':
-                    return {
-                pane: 'pane_Recreational_2',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/tourist_art_gallery.svg',
-            iconSize: [7.6, 7.6]
-        }),
-                interactive: true,
-            }
-                    break;
-                case 'cultural_feature':
-                    return {
-                pane: 'pane_Recreational_2',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/tourism=museum.svg',
-            iconSize: [7.6, 7.6]
-        }),
-                interactive: true,
-            }
-                    break;
-                case 'museum':
-                    return {
-                pane: 'pane_Recreational_2',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/tourist_museum.svg',
-            iconSize: [7.6, 7.6]
-        }),
-                interactive: true,
-            }
-                    break;
-                case 'park':
-                    return {
-                pane: 'pane_Recreational_2',
-        rotationAngle: 0.0,
-        rotationOrigin: 'center center',
-        icon: L.icon({
-            iconUrl: 'markers/landuse_coniferous.svg',
-            iconSize: [7.6, 7.6]
-        }),
-                interactive: true,
-            }
-                    break;
-                default:
-                    return {
-                pane: 'pane_Recreational_2',
-                radius: 4.0,
-                opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(78,206,66,1.0)',
-                interactive: true,
-            }
-                    break;
-            }
-        }
-        map.createPane('pane_Recreational_2');
-        map.getPane('pane_Recreational_2').style.zIndex = 402;
-        map.getPane('pane_Recreational_2').style['mix-blend-mode'] = 'normal';
-        var layer_Recreational_2 = new L.geoJson(json_Recreational_2, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_Recreational_2',
-            layerName: 'layer_Recreational_2',
-            pane: 'pane_Recreational_2',
-            onEachFeature: pop_Recreational_2,
-            pointToLayer: function (feature, latlng) {
-                var context = {
-                    feature: feature,
-                    variables: {}
-                };
-                return L.circleMarker(latlng, style_Recreational_2_0(feature));
-            },
-        });
-        bounds_group.addLayer(layer_Recreational_2);
-        map.addLayer(layer_Recreational_2);
-        function pop_Entertainment_3(feature, layer) {
+        bounds_group.addLayer(layer_Hospitality_3);
+        cluster_Hospitality_3.addTo(map);
+        function pop_Entertainment_4(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">name_of_it</th>\
@@ -305,9 +302,9 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_Entertainment_3_0() {
+        function style_Entertainment_4_0() {
             return {
-                pane: 'pane_Entertainment_3',
+                pane: 'pane_Entertainment_4',
         rotationAngle: 0.0,
         rotationOrigin: 'center center',
         icon: L.icon({
@@ -317,26 +314,28 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_Entertainment_3');
-        map.getPane('pane_Entertainment_3').style.zIndex = 403;
-        map.getPane('pane_Entertainment_3').style['mix-blend-mode'] = 'normal';
-        var layer_Entertainment_3 = new L.geoJson(json_Entertainment_3, {
+        map.createPane('pane_Entertainment_4');
+        map.getPane('pane_Entertainment_4').style.zIndex = 404;
+        map.getPane('pane_Entertainment_4').style['mix-blend-mode'] = 'normal';
+        var layer_Entertainment_4 = new L.geoJson(json_Entertainment_4, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_Entertainment_3',
-            layerName: 'layer_Entertainment_3',
-            pane: 'pane_Entertainment_3',
-            onEachFeature: pop_Entertainment_3,
+            dataVar: 'json_Entertainment_4',
+            layerName: 'layer_Entertainment_4',
+            pane: 'pane_Entertainment_4',
+            onEachFeature: pop_Entertainment_4,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.marker(latlng, style_Entertainment_3_0(feature));
+                return L.marker(latlng, style_Entertainment_4_0(feature));
             },
         });
-        bounds_group.addLayer(layer_Entertainment_3);
-        map.addLayer(layer_Entertainment_3);
+        bounds_group.addLayer(layer_Entertainment_4);
+        map.addLayer(layer_Entertainment_4);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/Entertainment_4.png" /> Entertainment': layer_Entertainment_4,'<img src="legend/Hospitality_3.png" /> Hospitality': cluster_Hospitality_3,'<img src="legend/PoliceStation_2.png" /> Police Station': layer_PoliceStation_2,'<img src="legend/Shopping_1.png" /> Shopping': layer_Shopping_1,"OpenStreetMap": layer_OpenStreetMap_0,}).addTo(map);
         setBounds();
         </script>
     </body>
