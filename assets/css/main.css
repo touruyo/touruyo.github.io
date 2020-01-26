@@ -46,22 +46,39 @@ My styling starts here
 	.boxA,
 	.boxB
 	{
-		float: left;
-		margin-right: 20px;
+		float:left;
+		margin-left: 80px;
+		
 	}
 	
 	.boxC
 	{
 		float: right;
+		
+		
 	}
 	.box
 	{
 		padding: 3em 2em 2em 2em;
 		border: 1px solid rgba(0,0,0,0.1);
+		padding-bottom: 20px;
 		border-radius: 8px;
 			text-align: center;
+			height: 320px;
 	}
-	
+	.byline{
+		color: #00BC8A;
+		margin-bottom: 20px;
+	}
+	#extra1{
+		border: 1px solid rgba(0,0,0,0.1);
+		height: 320px;
+		padding-left: 3em;
+		margin-left: 1em;
+		margin-right: 1em;
+		box-shadow:0px 10px 10px gray;
+	}
+
 	
 		#extra
 		{
