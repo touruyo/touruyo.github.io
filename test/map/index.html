@@ -1,0 +1,1370 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <link rel="stylesheet" href="css/leaflet-sidebar.css">
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        
+        <div id="sidebar" class="sidebar collapsed">
+            <!-- Nav tabs -->
+            <div class="sidebar-tabs">
+                <ul role="tablist">
+                    <li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
+                    <li><a href="#profile" role="tab"><i class="fa fa-user"></i></a></li>
+                    <li class="disabled"><a href="#messages" role="tab"><i class="fa fa-envelope"></i></a></li>
+                    <li><a href="https://github.com/Turbo87/sidebar-v2" role="tab" target="_blank"><i class="fa fa-github"></i></a></li>
+                </ul>
+    
+                <ul role="tablist">
+                    <li><a href="#settings" role="tab"><i class="fa fa-gear"></i></a></li>
+                </ul>
+            </div>
+    
+            <!-- Tab panes -->
+            <div class="sidebar-content">
+                <div class="sidebar-pane" id="home">
+                    <h1 class="sidebar-header">
+                        sidebar-v2
+                        <span class="sidebar-close"><i class="fa fa-caret-left"></i></span>
+                    </h1>
+    
+                    <p>A responsive sidebar for mapping libraries like <a href="http://leafletjs.com/">Leaflet</a> or <a href="http://openlayers.org/">OpenLayers</a>.</p>
+    
+                    <p class="lorem">Uyo Metro TIS</p>
+    
+                    <p class="lorem">Para 1.</p>
+    
+                    <p class="lorem">Para 2.</p>
+    
+                    <p class="lorem">Coming Soon!.</p>
+                </div>
+    
+                <div class="sidebar-pane" id="profile">
+                    <h1 class="sidebar-header">Profile<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                </div>
+    
+                <div class="sidebar-pane" id="messages">
+                    <h1 class="sidebar-header">Messages<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                </div>
+    
+                <div class="sidebar-pane" id="settings">
+                    <h1 class="sidebar-header">Settings<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                </div>
+            </div>
+        </div>
+
+        <div id="map" class="sidebar-map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="data/Sport_1.js"></script>
+        <script src="data/Shopping_2.js"></script>
+        <script src="data/Police_3.js"></script>
+        <script src="data/Park_4.js"></script>
+        <script src="data/Musuem_5.js"></script>
+        <script src="data/Hospitality_6.js"></script>
+        <script src="data/Health_7.js"></script>
+        <script src="data/FoodDrink_8.js"></script>
+        <script src="data/EventCentre_9.js"></script>
+        <script src="data/Courier_10.js"></script>
+        <script src="data/Cultural_11.js"></script>
+        <script src="data/Cinema_12.js"></script>
+        <script src="data/Beauty_13.js"></script>
+        <script src="data/Banks_14.js"></script>
+        <script src="data/ArtGala_15.js"></script>
+        <script src="js/leaflet-sidebar.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[5.017697043673773,7.906177417451191],[5.040975792907212,7.945136288687081]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+    
+
+        L.easyButton('fa-home', function(){
+    //var home (-);
+        map.setView([5.0338,7.9299], 14);  
+        }).addTo(map);
+
+        //Side bar
+        var sidebar = L.control.sidebar('sidebar').addTo(map);
+
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+
+
+        var layer_OpenTopo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_OpenTopo;
+
+        map.addLayer(layer_OpenTopo);
+
+        var layer_OpenStreetMap_0 = L.tileLayer('http://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_OpenStreetMap_0;
+        map.addLayer(layer_OpenStreetMap_0);
+
+        
+        function pop_Sport_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name of Item</th>\
+                        <td>' + (feature.properties['Name of It'] !== null ? Autolinker.link(feature.properties['Name of It'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Category</th>\
+                        <td>' + (feature.properties['category'] !== null ? Autolinker.link(feature.properties['category'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Street Name</th>\
+                        <td>' + (feature.properties['street'] !== null ? Autolinker.link(feature.properties['street'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Address</th>\
+                        <td>' + (feature.properties['address'] !== null ? Autolinker.link(feature.properties['address'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Type</th>\
+                        <td>' + (feature.properties['entertainm'] !== null ? Autolinker.link(feature.properties['entertainm'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['rating'] !== null ? Autolinker.link(feature.properties['rating'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['phone'] !== null ? Autolinker.link(feature.properties['phone'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Sport_1_0() {
+            return {
+                pane: 'pane_Sport_1',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/stadium.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Sport_1');
+        map.getPane('pane_Sport_1').style.zIndex = 401;
+        map.getPane('pane_Sport_1').style['mix-blend-mode'] = 'normal';
+        var layer_Sport_1 = new L.geoJson(json_Sport_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Sport_1',
+            layerName: 'layer_Sport_1',
+            pane: 'pane_Sport_1',
+            onEachFeature: pop_Sport_1,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Sport_1_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Sport_1);
+        map.addLayer(layer_Sport_1);
+        function pop_Shopping_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name of Item</th>\
+                        <td>' + (feature.properties['name_of_it'] !== null ? Autolinker.link(feature.properties['name_of_it'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Category</th>\
+                        <td>' + (feature.properties['category'] !== null ? Autolinker.link(feature.properties['category'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Street</th>\
+                        <td>' + (feature.properties['street'] !== null ? Autolinker.link(feature.properties['street'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Address</th>\
+                        <td>' + (feature.properties['address'] !== null ? Autolinker.link(feature.properties['address'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Rating</th>\
+                        <td>' + (feature.properties['rating'] !== null ? Autolinker.link(feature.properties['rating'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Phone</th>\
+                        <td>' + (feature.properties['phone'] !== null ? Autolinker.link(feature.properties['phone'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Type</th>\
+                        <td>' + (feature.properties['shopping_t'] !== null ? Autolinker.link(feature.properties['shopping_t'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Others</th>\
+                        <td>' + (feature.properties['shopping_1'] !== null ? Autolinker.link(feature.properties['shopping_1'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Shopping_2_0() {
+            return {
+                pane: 'pane_Shopping_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/grocery-or-supermarket.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Shopping_2');
+        map.getPane('pane_Shopping_2').style.zIndex = 402;
+        map.getPane('pane_Shopping_2').style['mix-blend-mode'] = 'normal';
+        var layer_Shopping_2 = new L.geoJson(json_Shopping_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Shopping_2',
+            layerName: 'layer_Shopping_2',
+            pane: 'pane_Shopping_2',
+            onEachFeature: pop_Shopping_2,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Shopping_2_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Shopping_2);
+        map.addLayer(layer_Shopping_2);
+        function pop_Police_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? Autolinker.link(feature.properties['Name'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Category</th>\
+                        <td>' + (feature.properties['Category'] !== null ? Autolinker.link(feature.properties['Category'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Street</th>\
+                        <td>' + (feature.properties['Street'] !== null ? Autolinker.link(feature.properties['Street'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Address</th>\
+                        <td>' + (feature.properties['Address'] !== null ? Autolinker.link(feature.properties['Address'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">rating</th>\
+                        <td>' + (feature.properties['rating'] !== null ? Autolinker.link(feature.properties['rating'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">servicing_</th>\
+                        <td>' + (feature.properties['servicing_'] !== null ? Autolinker.link(feature.properties['servicing_'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">phone</th>\
+                        <td>' + (feature.properties['phone'] !== null ? Autolinker.link(feature.properties['phone'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Police_3_0() {
+            return {
+                pane: 'pane_Police_3',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/police.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Police_3');
+        map.getPane('pane_Police_3').style.zIndex = 403;
+        map.getPane('pane_Police_3').style['mix-blend-mode'] = 'normal';
+        var layer_Police_3 = new L.geoJson(json_Police_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Police_3',
+            layerName: 'layer_Police_3',
+            pane: 'pane_Police_3',
+            onEachFeature: pop_Police_3,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Police_3_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Police_3);
+        map.addLayer(layer_Police_3);
+        function pop_Park_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name of Item</th>\
+                        <td>' + (feature.properties['name_of_it'] !== null ? Autolinker.link(feature.properties['name_of_it'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Category</th>\
+                        <td>' + (feature.properties['category'] !== null ? Autolinker.link(feature.properties['category'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Street</th>\
+                        <td>' + (feature.properties['street'] !== null ? Autolinker.link(feature.properties['street'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Address</th>\
+                        <td>' + (feature.properties['address'] !== null ? Autolinker.link(feature.properties['address'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Rating</th>\
+                        <td>' + (feature.properties['rating'] !== null ? Autolinker.link(feature.properties['rating'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Type</th>\
+                        <td>' + (feature.properties['recreation'] !== null ? Autolinker.link(feature.properties['recreation'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Website</th>\
+                        <td>' + (feature.properties['website'] !== null ? Autolinker.link(feature.properties['website'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Park_4_0() {
+            return {
+                pane: 'pane_Park_4',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/tree.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Park_4');
+        map.getPane('pane_Park_4').style.zIndex = 404;
+        map.getPane('pane_Park_4').style['mix-blend-mode'] = 'normal';
+        var layer_Park_4 = new L.geoJson(json_Park_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Park_4',
+            layerName: 'layer_Park_4',
+            pane: 'pane_Park_4',
+            onEachFeature: pop_Park_4,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Park_4_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Park_4);
+        map.addLayer(layer_Park_4);
+        function pop_Musuem_5(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name of Item</th>\
+                        <td>' + (feature.properties['name_of_it'] !== null ? Autolinker.link(feature.properties['name_of_it'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Category</th>\
+                        <td>' + (feature.properties['category'] !== null ? Autolinker.link(feature.properties['category'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Street</th>\
+                        <td>' + (feature.properties['street'] !== null ? Autolinker.link(feature.properties['street'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Address</th>\
+                        <td>' + (feature.properties['address'] !== null ? Autolinker.link(feature.properties['address'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Rating</th>\
+                        <td>' + (feature.properties['rating'] !== null ? Autolinker.link(feature.properties['rating'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Recreation</th>\
+                        <td>' + (feature.properties['recreation'] !== null ? Autolinker.link(feature.properties['recreation'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Photo</th>\
+                        <td>' + (feature.properties['Photo'] !== null ? '<img src="images/' + String(feature.properties['Photo']).replace(/[\\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Musuem_5_0() {
+            return {
+                pane: 'pane_Musuem_5',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/museum.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Musuem_5');
+        map.getPane('pane_Musuem_5').style.zIndex = 405;
+        map.getPane('pane_Musuem_5').style['mix-blend-mode'] = 'normal';
+        var layer_Musuem_5 = new L.geoJson(json_Musuem_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Musuem_5',
+            layerName: 'layer_Musuem_5',
+            pane: 'pane_Musuem_5',
+            onEachFeature: pop_Musuem_5,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Musuem_5_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Musuem_5);
+        map.addLayer(layer_Musuem_5);
+        function pop_Hospitality_6(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name of Item</th>\
+                        <td>' + (feature.properties['name_of_it'] !== null ? Autolinker.link(feature.properties['name_of_it'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Category</th>\
+                        <td>' + (feature.properties['category'] !== null ? Autolinker.link(feature.properties['category'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Street</th>\
+                        <td>' + (feature.properties['street'] !== null ? Autolinker.link(feature.properties['street'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Adress</th>\
+                        <td>' + (feature.properties['address'] !== null ? Autolinker.link(feature.properties['address'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Type</th>\
+                        <td>' + (feature.properties['type_of_ho'] !== null ? Autolinker.link(feature.properties['type_of_ho'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Services/Amenities</th>\
+                        <td>' + (feature.properties['services_o'] !== null ? Autolinker.link(feature.properties['services_o'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Rating</th>\
+                        <td>' + (feature.properties['rating'] !== null ? Autolinker.link(feature.properties['rating'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Website</th>\
+                        <td>' + (feature.properties['website'] !== null ? Autolinker.link(feature.properties['website'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Phone</th>\
+                        <td>' + (feature.properties['phone'] !== null ? Autolinker.link(feature.properties['phone'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Email</th>\
+                        <td>' + (feature.properties['email'] !== null ? Autolinker.link(feature.properties['email'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Photo</th>\
+                        <td>' + (feature.properties['Photo'] !== null ? '<img src="images/' + String(feature.properties['Photo']).replace(/[\\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Hospitality_6_0() {
+            return {
+                pane: 'pane_Hospitality_6',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/lodging.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Hospitality_6');
+        map.getPane('pane_Hospitality_6').style.zIndex = 406;
+        map.getPane('pane_Hospitality_6').style['mix-blend-mode'] = 'normal';
+        var layer_Hospitality_6 = new L.geoJson(json_Hospitality_6, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Hospitality_6',
+            layerName: 'layer_Hospitality_6',
+            pane: 'pane_Hospitality_6',
+            onEachFeature: pop_Hospitality_6,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Hospitality_6_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Hospitality_6);
+        map.addLayer(layer_Hospitality_6);
+        function pop_Health_7(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? Autolinker.link(feature.properties['Name'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Category</th>\
+                        <td>' + (feature.properties['Category'] !== null ? Autolinker.link(feature.properties['Category'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Street</th>\
+                        <td>' + (feature.properties['Street'] !== null ? Autolinker.link(feature.properties['Street'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Address</th>\
+                        <td>' + (feature.properties['Address'] !== null ? Autolinker.link(feature.properties['Address'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Type</th>\
+                        <td>' + (feature.properties['servicing_'] !== null ? Autolinker.link(feature.properties['servicing_'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Phone</th>\
+                        <td>' + (feature.properties['phone'] !== null ? Autolinker.link(feature.properties['phone'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Health_7_0() {
+            return {
+                pane: 'pane_Health_7',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/hospital.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Health_7');
+        map.getPane('pane_Health_7').style.zIndex = 407;
+        map.getPane('pane_Health_7').style['mix-blend-mode'] = 'normal';
+        var layer_Health_7 = new L.geoJson(json_Health_7, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Health_7',
+            layerName: 'layer_Health_7',
+            pane: 'pane_Health_7',
+            onEachFeature: pop_Health_7,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Health_7_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Health_7);
+        map.addLayer(layer_Health_7);
+        function pop_FoodDrink_8(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name of Item</th>\
+                        <td>' + (feature.properties['name_of_it'] !== null ? Autolinker.link(feature.properties['name_of_it'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Category</th>\
+                        <td>' + (feature.properties['category'] !== null ? Autolinker.link(feature.properties['category'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Street</th>\
+                        <td>' + (feature.properties['street'] !== null ? Autolinker.link(feature.properties['street'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Adress</th>\
+                        <td>' + (feature.properties['address'] !== null ? Autolinker.link(feature.properties['address'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Type</th>\
+                        <td>' + (feature.properties['fooddrink'] !== null ? Autolinker.link(feature.properties['fooddrink'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Rating</th>\
+                        <td>' + (feature.properties['rating'] !== null ? Autolinker.link(feature.properties['rating'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Website</th>\
+                        <td>' + (feature.properties['website'] !== null ? Autolinker.link(feature.properties['website'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Phone</th>\
+                        <td>' + (feature.properties['phone'] !== null ? Autolinker.link(feature.properties['phone'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_FoodDrink_8_0() {
+            return {
+                pane: 'pane_FoodDrink_8',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/restaurant.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_FoodDrink_8');
+        map.getPane('pane_FoodDrink_8').style.zIndex = 408;
+        map.getPane('pane_FoodDrink_8').style['mix-blend-mode'] = 'normal';
+        var layer_FoodDrink_8 = new L.geoJson(json_FoodDrink_8, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_FoodDrink_8',
+            layerName: 'layer_FoodDrink_8',
+            pane: 'pane_FoodDrink_8',
+            onEachFeature: pop_FoodDrink_8,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_FoodDrink_8_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_FoodDrink_8);
+        map.addLayer(layer_FoodDrink_8);
+        function pop_EventCentre_9(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name of Item</th>\
+                        <td>' + (feature.properties['name_of_it'] !== null ? Autolinker.link(feature.properties['name_of_it'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Category</th>\
+                        <td>' + (feature.properties['category'] !== null ? Autolinker.link(feature.properties['category'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Street Name</th>\
+                        <td>' + (feature.properties['street'] !== null ? Autolinker.link(feature.properties['street'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Address</th>\
+                        <td>' + (feature.properties['address'] !== null ? Autolinker.link(feature.properties['address'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Type</th>\
+                        <td>' + (feature.properties['entertainm'] !== null ? Autolinker.link(feature.properties['entertainm'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Rating</th>\
+                        <td>' + (feature.properties['rating'] !== null ? Autolinker.link(feature.properties['rating'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Phone</th>\
+                        <td>' + (feature.properties['phone'] !== null ? Autolinker.link(feature.properties['phone'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_EventCentre_9_0() {
+            return {
+                pane: 'pane_EventCentre_9',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/event-tent.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_EventCentre_9');
+        map.getPane('pane_EventCentre_9').style.zIndex = 409;
+        map.getPane('pane_EventCentre_9').style['mix-blend-mode'] = 'normal';
+        var layer_EventCentre_9 = new L.geoJson(json_EventCentre_9, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_EventCentre_9',
+            layerName: 'layer_EventCentre_9',
+            pane: 'pane_EventCentre_9',
+            onEachFeature: pop_EventCentre_9,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_EventCentre_9_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_EventCentre_9);
+        map.addLayer(layer_EventCentre_9);
+        function pop_Courier_10(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? Autolinker.link(feature.properties['Name'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Category</th>\
+                        <td>' + (feature.properties['Category'] !== null ? Autolinker.link(feature.properties['Category'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Street</th>\
+                        <td>' + (feature.properties['Street'] !== null ? Autolinker.link(feature.properties['Street'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Address</th>\
+                        <td>' + (feature.properties['Address'] !== null ? Autolinker.link(feature.properties['Address'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">rating</th>\
+                        <td>' + (feature.properties['rating'] !== null ? Autolinker.link(feature.properties['rating'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">servicing_</th>\
+                        <td>' + (feature.properties['servicing_'] !== null ? Autolinker.link(feature.properties['servicing_'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">phone</th>\
+                        <td>' + (feature.properties['phone'] !== null ? Autolinker.link(feature.properties['phone'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Courier_10_0() {
+            return {
+                pane: 'pane_Courier_10',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/post-officesvg.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Courier_10');
+        map.getPane('pane_Courier_10').style.zIndex = 410;
+        map.getPane('pane_Courier_10').style['mix-blend-mode'] = 'normal';
+        var layer_Courier_10 = new L.geoJson(json_Courier_10, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Courier_10',
+            layerName: 'layer_Courier_10',
+            pane: 'pane_Courier_10',
+            onEachFeature: pop_Courier_10,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Courier_10_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Courier_10);
+        map.addLayer(layer_Courier_10);
+        function pop_Cultural_11(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">name_of_it</th>\
+                        <td>' + (feature.properties['name_of_it'] !== null ? Autolinker.link(feature.properties['name_of_it'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">category</th>\
+                        <td>' + (feature.properties['category'] !== null ? Autolinker.link(feature.properties['category'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">street</th>\
+                        <td>' + (feature.properties['street'] !== null ? Autolinker.link(feature.properties['street'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">address</th>\
+                        <td>' + (feature.properties['address'] !== null ? Autolinker.link(feature.properties['address'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">rating</th>\
+                        <td>' + (feature.properties['rating'] !== null ? Autolinker.link(feature.properties['rating'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">recreation</th>\
+                        <td>' + (feature.properties['recreation'] !== null ? Autolinker.link(feature.properties['recreation'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">website</th>\
+                        <td>' + (feature.properties['website'] !== null ? Autolinker.link(feature.properties['website'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Cultural_11_0() {
+            return {
+                pane: 'pane_Cultural_11',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/eiffel-tower-landmark.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Cultural_11');
+        map.getPane('pane_Cultural_11').style.zIndex = 411;
+        map.getPane('pane_Cultural_11').style['mix-blend-mode'] = 'normal';
+        var layer_Cultural_11 = new L.geoJson(json_Cultural_11, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Cultural_11',
+            layerName: 'layer_Cultural_11',
+            pane: 'pane_Cultural_11',
+            onEachFeature: pop_Cultural_11,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Cultural_11_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Cultural_11);
+        map.addLayer(layer_Cultural_11);
+        function pop_Cinema_12(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name of Item</th>\
+                        <td>' + (feature.properties['name_of_it'] !== null ? Autolinker.link(feature.properties['name_of_it'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Category</th>\
+                        <td>' + (feature.properties['category'] !== null ? Autolinker.link(feature.properties['category'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Street Name</th>\
+                        <td>' + (feature.properties['street'] !== null ? Autolinker.link(feature.properties['street'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Address</th>\
+                        <td>' + (feature.properties['address'] !== null ? Autolinker.link(feature.properties['address'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Type</th>\
+                        <td>' + (feature.properties['entertainm'] !== null ? Autolinker.link(feature.properties['entertainm'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Rating</th>\
+                        <td>' + (feature.properties['rating'] !== null ? Autolinker.link(feature.properties['rating'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Phone</th>\
+                        <td>' + (feature.properties['phone'] !== null ? Autolinker.link(feature.properties['phone'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Photo</th>\
+                        <td>' + (feature.properties['Photo'] !== null ? '<img src="images/' + String(feature.properties['Photo']).replace(/[\\\/:]/g, '_').trim() + '">' : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Cinema_12_0() {
+            return {
+                pane: 'pane_Cinema_12',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/popcorn.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Cinema_12');
+        map.getPane('pane_Cinema_12').style.zIndex = 412;
+        map.getPane('pane_Cinema_12').style['mix-blend-mode'] = 'normal';
+        var layer_Cinema_12 = new L.geoJson(json_Cinema_12, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Cinema_12',
+            layerName: 'layer_Cinema_12',
+            pane: 'pane_Cinema_12',
+            onEachFeature: pop_Cinema_12,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Cinema_12_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Cinema_12);
+        map.addLayer(layer_Cinema_12);
+        function pop_Beauty_13(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? Autolinker.link(feature.properties['Name'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Category</th>\
+                        <td>' + (feature.properties['Category'] !== null ? Autolinker.link(feature.properties['Category'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Street</th>\
+                        <td>' + (feature.properties['Street'] !== null ? Autolinker.link(feature.properties['Street'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Address</th>\
+                        <td>' + (feature.properties['Address'] !== null ? Autolinker.link(feature.properties['Address'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Rating</th>\
+                        <td>' + (feature.properties['rating'] !== null ? Autolinker.link(feature.properties['rating'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Type</th>\
+                        <td>' + (feature.properties['servicing_'] !== null ? Autolinker.link(feature.properties['servicing_'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Phone</th>\
+                        <td>' + (feature.properties['phone'] !== null ? Autolinker.link(feature.properties['phone'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Beauty_13_0() {
+            return {
+                pane: 'pane_Beauty_13',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/beauty-salon.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Beauty_13');
+        map.getPane('pane_Beauty_13').style.zIndex = 413;
+        map.getPane('pane_Beauty_13').style['mix-blend-mode'] = 'normal';
+        var layer_Beauty_13 = new L.geoJson(json_Beauty_13, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Beauty_13',
+            layerName: 'layer_Beauty_13',
+            pane: 'pane_Beauty_13',
+            onEachFeature: pop_Beauty_13,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Beauty_13_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Beauty_13);
+        map.addLayer(layer_Beauty_13);
+        function pop_Banks_14(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? Autolinker.link(feature.properties['OBJECTID'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Name</th>\
+                        <td>' + (feature.properties['Name'] !== null ? Autolinker.link(feature.properties['Name'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Category</th>\
+                        <td>' + (feature.properties['Category'] !== null ? Autolinker.link(feature.properties['Category'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Street</th>\
+                        <td>' + (feature.properties['Street'] !== null ? Autolinker.link(feature.properties['Street'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Address</th>\
+                        <td>' + (feature.properties['Address'] !== null ? Autolinker.link(feature.properties['Address'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Rating</th>\
+                        <td>' + (feature.properties['rating'] !== null ? Autolinker.link(feature.properties['rating'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Type</th>\
+                        <td>' + (feature.properties['servicing_'] !== null ? Autolinker.link(feature.properties['servicing_'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Phone</th>\
+                        <td>' + (feature.properties['phone'] !== null ? Autolinker.link(feature.properties['phone'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Banks_14_0() {
+            return {
+                pane: 'pane_Banks_14',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/bank.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Banks_14');
+        map.getPane('pane_Banks_14').style.zIndex = 414;
+        map.getPane('pane_Banks_14').style['mix-blend-mode'] = 'normal';
+        var layer_Banks_14 = new L.geoJson(json_Banks_14, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Banks_14',
+            layerName: 'layer_Banks_14',
+            pane: 'pane_Banks_14',
+            onEachFeature: pop_Banks_14,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_Banks_14_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Banks_14);
+        map.addLayer(layer_Banks_14);
+        function pop_ArtGala_15(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">name_of_it</th>\
+                        <td>' + (feature.properties['name_of_it'] !== null ? Autolinker.link(feature.properties['name_of_it'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">category</th>\
+                        <td>' + (feature.properties['category'] !== null ? Autolinker.link(feature.properties['category'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">street</th>\
+                        <td>' + (feature.properties['street'] !== null ? Autolinker.link(feature.properties['street'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">address</th>\
+                        <td>' + (feature.properties['address'] !== null ? Autolinker.link(feature.properties['address'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">rating</th>\
+                        <td>' + (feature.properties['rating'] !== null ? Autolinker.link(feature.properties['rating'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">recreation</th>\
+                        <td>' + (feature.properties['recreation'] !== null ? Autolinker.link(feature.properties['recreation'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">website</th>\
+                        <td>' + (feature.properties['website'] !== null ? Autolinker.link(feature.properties['website'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ArtGala_15_0() {
+            return {
+                pane: 'pane_ArtGala_15',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/tourist_art_gallery.svg',
+            iconSize: [11.399999999999999, 11.399999999999999]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_ArtGala_15');
+        map.getPane('pane_ArtGala_15').style.zIndex = 415;
+        map.getPane('pane_ArtGala_15').style['mix-blend-mode'] = 'normal';
+        var layer_ArtGala_15 = new L.geoJson(json_ArtGala_15, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ArtGala_15',
+            layerName: 'layer_ArtGala_15',
+            pane: 'pane_ArtGala_15',
+            onEachFeature: pop_ArtGala_15,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_ArtGala_15_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_ArtGala_15);
+        map.addLayer(layer_ArtGala_15);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/ArtGala_15.png" /> Art Gala': layer_ArtGala_15,'<img src="legend/Banks_14.png" /> Banks': layer_Banks_14,'<img src="legend/Beauty_13.png" /> Beauty': layer_Beauty_13,'<img src="legend/Cinema_12.png" /> Cinema': layer_Cinema_12,'<img src="legend/Cultural_11.png" /> Cultural': layer_Cultural_11,'<img src="legend/Courier_10.png" /> Courier': layer_Courier_10,'<img src="legend/EventCentre_9.png" /> Event Centre': layer_EventCentre_9,'<img src="legend/FoodDrink_8.png" /> FoodDrink': layer_FoodDrink_8,'<img src="legend/Health_7.png" /> Health': layer_Health_7,'<img src="legend/Hospitality_6.png" /> Hospitality': layer_Hospitality_6,'<img src="legend/Musuem_5.png" /> Musuem': layer_Musuem_5,'<img src="legend/Park_4.png" /> Park': layer_Park_4,'<img src="legend/Police_3.png" /> Police': layer_Police_3,'<img src="legend/Shopping_2.png" /> Shopping': layer_Shopping_2,'<img src="legend/Sport_1.png" /> Sport': layer_Sport_1,"OpenStreetMap": layer_OpenStreetMap_0,}).addTo(map);
+        setBounds();
+        map.addControl(new L.Control.Search({
+            layer: layer_Hospitality_6,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'type_of_ho'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        resetLabels([layer_Musuem_5]);
+        map.on("zoomend", function(){
+            resetLabels([layer_Musuem_5]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_Musuem_5]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_Musuem_5]);
+        });
+
+        //Legend implementation
+
+        var lengend = L.control({
+            position: 'bottomleft'
+        });
+        lengend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'info legend'),
+                layers = ["Art Galary", "Bank"],
+                icon = ["file:///C:/Users/HP/Documents/Project/Touruyo/site/touruyo.github.io/test/map/markers/bank.svg"];
+
+                for (var i = 0; i < layers.length; i++) {
+                    div.innerHTML += layers[i] + ("<img src="+ icon[i]+ " height = '50' width = '50'>")+'<br>';
+                }
+                return div;
+        }
+
+        
+
+        lengend.addTo(map);
+
+        </script>
+    </body>
+</html>
