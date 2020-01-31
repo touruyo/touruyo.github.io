@@ -14,7 +14,8 @@
         <link rel="stylesheet" href="css/leaflet-sidebar.css">
         <link rel="stylesheet" href="css/leaflet.zoomhome.css">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
-        
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+        <link rel="stylesheet" href="css/leaflet-routing-machine.css" />
 
         <style>
         html, body, #map {
@@ -83,6 +84,8 @@
         </div>
         <div id="map" class="sidebar-map">
         </div>
+        <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+        <script src="js/leaflet-routing-machine.js"></script>
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
         <script src="js/leaflet.rotatedMarker.js"></script>
@@ -112,6 +115,7 @@
         <script src="data/ArtGala_15.js"></script>
         <script src="js/leaflet-sidebar.js"></script>
         <script src="js/leaflet.zoomhom.min.js"></script>
+        
         <script>
         var highlightLayer;
         function highlightFeature(e) {
@@ -133,17 +137,24 @@
         }).fitBounds([[4.985434532978347,7.8932017897200994],[5.053015911427142,7.973841479726276]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('Maintained by <a href="https://linibensonjr.github.io" target="_blank">Iniobong Benson</a> &middot; <a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+     
         //Custom zoom
         var zoomHome = L.Control.zoomHome();
         zoomHome.setHomeZoom(13);
         zoomHome.addTo(map);
 
-        
         L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
        
         //Side bar
          var sidebar = L.control.sidebar('sidebar').addTo(map);
 
+         var scale = L.control.scale({
+             maxWidth: 150,
+             metric: true,
+             imperial: true
+         });
+         scale.addTo(map);   
+        
         var measureControl = new L.Control.Measure({
             position: 'topleft',
             primaryLengthUnit: 'meters',
@@ -151,8 +162,6 @@
             primaryAreaUnit: 'sqmeters',
             secondaryAreaUnit: 'hectares'
         });
-
-
         measureControl.addTo(map);
         document.getElementsByClassName('leaflet-control-measure-toggle')[0]
         .innerHTML = '';
@@ -172,6 +181,7 @@
         });
         layer_OpenStreetMap_0;
         map.addLayer(layer_OpenStreetMap_0);
+
         function pop_Sport_1(feature, layer) {
             layer.on({
                 mouseout: function(e) {
@@ -180,7 +190,7 @@
                     }
                 },
                 mouseover: highlightFeature,
-            });
+            });       
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">Name of Item</th>\
@@ -1356,7 +1366,6 @@ var lengend = L.control({
                 return div;
         }
 lengend.addTo(map);
-
         </script>
     </body>
 </html>
