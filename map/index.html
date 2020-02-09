@@ -99,6 +99,7 @@
         <script src="js/leaflet-measure.js"></script>
         <script src="data/Sport_1.js"></script>
         <script src="js/leaflet-search.js"></script>
+        <script src="data/allPOIs_17.js"></script>
         <script src="data/Shopping_2.js"></script>
         <script src="data/Police_3.js"></script>
         <script src="data/Park_4.js"></script>
@@ -181,6 +182,46 @@
         });
         layer_OpenStreetMap_0;
         map.addLayer(layer_OpenStreetMap_0);
+
+        //General search
+		function pop_allPOIs_17(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+        }
+
+        function style_allPOIs_17_0() {
+            return {
+                fill: false,
+                stroke: false,
+                interactive: false
+            }
+        }
+        map.createPane('pane_allPOIs_17');
+        map.getPane('pane_allPOIs_17').style.zIndex = 417;
+        map.getPane('pane_allPOIs_17').style['mix-blend-mode'] = 'normal';
+        var layer_allPOIs_17 = new L.geoJson(json_allPOIs_17, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_allPOIs_17',
+            layerName: 'layer_allPOIs_17',
+            pane: 'pane_allPOIs_17',
+            onEachFeature: pop_allPOIs_17,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_allPOIs_17_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_allPOIs_17);
+		
 
         function pop_Sport_1(feature, layer) {
             layer.on({
@@ -1332,10 +1373,10 @@
         setBounds();
 
         map.addControl(new L.Control.Search({
-            layer: layer_Hospitality_6,
+            layer: layer_allPOIs_17,
             initial: false,
             hideMarkerOnCollapse: true,
-            propertyName: 'name_of_it'}));
+            propertyName: 'name_of__1'}));
         document.getElementsByClassName('search-button')[0].className +=
          ' fa fa-binoculars';
 
