@@ -28,6 +28,11 @@ My styling starts here
 		width:40% ;
 	}
 
+.abtUyo{
+	color: blue;
+	scroll-snap-type: mandatory;
+}
+
 	#mybanner > .inner {
 		margin-left: auto;
 		margin-right: auto;
@@ -72,13 +77,14 @@ My styling starts here
 	}
 	#extra1{
 		border: 1px solid rgba(0,0,0,0.1);
-		height: 320px;
+		height: 720px;
 		padding-left: 3em;
 		margin-left: 1em;
 		margin-right: 1em;
 		box-shadow:0px 10px 10px gray;
+		position: relative;
 	}
-
+	
 	
 		#extra
 		{
