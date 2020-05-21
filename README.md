@@ -1,13 +1,13 @@
-#**Welcome to the project repository.**
+# **Welcome to the project repository.**
 This project is a final year project carried out in The Department of Geoinformatics and Surveying, University of Uyo by [Iniobong Benson](https://about.me/ibenson).
 
-##**About the Project**
+## **About the Project**
 This project is a Web-based tourism information system using Geographic INformation System (GIS) and web technologies. The final map can be found [here](https://touruyo.github.io/map) and the project page is available [here](https://touruyo.github.io).
 
 
 This repo is maintained by [Iniobong Benson](https://github.com/linibensonjr).
 
-###**The project uses the following tools:**
+### **The project uses the following tools:**
 * [QGIS](https://qgis.org)
     An Open Source Geospatial Software
 
